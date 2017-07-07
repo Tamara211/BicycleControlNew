@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bde0c900-a94a-4611-8508-bf3b82bd52fc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ConstantMatrices.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BicycleParameters.py" afterPath="$PROJECT_DIR$/BicycleParameters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EquationsCalculation.py" afterPath="$PROJECT_DIR$/EquationsCalculation.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -212,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1499338978217</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added the calculation for constant matrices from the simulation implementation">
+      <created>1499418844517</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1499418844517</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -264,7 +268,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="Added the calculation for constant matrices from the simulation implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the calculation for constant matrices from the simulation implementation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
