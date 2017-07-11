@@ -6,6 +6,7 @@ from ConstantMatrices import ConstantMatrices
 class EquationsCalculation:
 
     kp = 4.28  # TODO validate value - Constant value in torque calculation
+    kd = 1 #Validate
 
     def __init__(self):
 
@@ -16,7 +17,7 @@ class EquationsCalculation:
 
 
     def calculateTorque(self):
-        self.deltaTorque = self.kp*(self.params.delta - self.desiredDeltaAngle) #TODO is it ok to ignore the kd(deltaDot) ?
+        self.deltaTorque = self.kp*(self.params.delta - self.desiredDeltaAngle)# + self.kd * rollAngularRate
 
     def kinematicEquations(self):
         self.params.x = self.params.v * cos(self.params.psi) * self.params.rearWheelRadius
