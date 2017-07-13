@@ -18,7 +18,7 @@ class BicycleParameters:
         self.delta = 0 # Steering angle (Can be controlled)
         self.deltaDot = 0 # Steering angular velocity (Can be controlled)
 
-        #TODO Deleter?
+        #TODO Delete?
         #self.thetaR = 0 # rear wheel angle relative to the rear frame
        # self.thetaF = 0 # front wheel angle relative to the front frame
 

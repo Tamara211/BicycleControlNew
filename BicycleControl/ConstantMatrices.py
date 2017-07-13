@@ -65,28 +65,6 @@ class ConstantMatrices:
         x_H = cmass_H[0]
         z_H = cmass_H[2]
 
-        # I_Rxx = 0.0603
-        # I_Ryy = 0.12
-        #
-        # I_Bxx = 9.2
-        # I_Bxz = 2.4
-        # I_Byy = 11
-        # I_Bzz = 2.8
-        #
-        # I_Hxx = 0.05892
-        # I_Hxz = -0.00756
-        # I_Hyy = 0.06
-        # I_Hzz = 0.00708
-        #
-        # I_Fxx = 0.1405
-        # I_Fyy = 0.28
-        #
-        # x_B = 0.3
-        # z_B = -0.9
-        #
-        # x_H = 0.9
-        # z_H = -0.7
-
         # Equation instantiation
 
         # (A1)
