@@ -5,10 +5,14 @@ class Controller:
 
     def __init__(self):
         self.result = EquationsCalculation()
+        #input from GUI
+        self.maxRollAngle = 0
+        self.minRollAngle = 0
+        self.desiredSteerAngle = 0
 
-    def requestSteer(self, desiredSteeringAngle):
-        resultedRollAngle = self.result.calculateRollAngleAfterSteering(desiredSteeringAngle)
-        if (resultedRollAngle > 0.5 or resultedRollAngle < -0.5):  # TODO validate values
+    def requestSteer(self):
+        resultedRollAngle = self.result.calculateRollAngleAfterSteering(self.desiredSteeringAngle)
+        if (resultedRollAngle > self.maxRollAngle or resultedRollAngle < self.minRollAngle):
             return 0  # Cannot steer
         else:  #  allow steering
              return 1  # Can steer

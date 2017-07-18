@@ -28,17 +28,17 @@ class BicycleParameters:
 
         #TODO validate values
 
-        self.wheelBase
+        self.wheelBase = 1.16 # m
         self.g = 9.81
-        self.rearFrameMass # Kg
-        self.rearWheelMass
-        self.rearWheelRadius
+        self.rearFrameMass = 12.06 # Kg
+        self.rearWheelMass = 2.56 # Kg
+        self.rearWheelRadius = 0.34 #m
 
-        self.frontFrameMass # Kg
-        self.frontFrameTilt
-        self.frontFrameTrail
-        self.frontWheelMass
-        self.frontWheelRadius
+        self.frontFrameMass = 2.54 # Kg
+        self.frontFrameTilt = 0.34 # Radians
+        self.frontFrameTrail = 0.08 #TODO measure again
+        self.frontWheelMass = 5.4 # Kg - including the motor?
+        self.frontWheelRadius = 34 #cm
 
         self.rearWheelInertialMatrix
         self.rearFrameInertialMatrix

@@ -84,18 +84,16 @@ class EquationsCalculation:
     # q_9: yaw angular rate
 
     def integrateEquations(self):
+        self.updateValues()
         self.q = np.add(self.q, np.add(self.stepSize * self.kinematicEquations(), self.stepSize * self.dynamicEquations()))
 
-    def requestSteer(self, desiredSteeringAngle):
-        self.updateValues()
+    def calculateRollAngleAfterSteering(self, desiredSteeringAngle):
+
         self.desiredDeltaAngle = desiredSteeringAngle
         self.calculateTorque()
         self.integrateEquations()
-        if(self.q[5] > 0.5 or self.q[5] < -0.5): #TODO validate values
-            return 0 #Cannot steer
-        else: #update values and allow steering
-            self.updateValues()
-        return 1 #Can steer
+        return self.q[5]
+
 
     def updateValues(self):
         self.params.x = self.q[0]
