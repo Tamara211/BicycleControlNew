@@ -32,7 +32,7 @@ class ConstantMatrices:
         m_B = self.rearFrameMass
         m_H = self.frontFrameMass
 
-        I_R = self.rearWheel.InertialMatrix
+        I_R = self.rearWheelInertialMatrix
         I_B = self.rearFrameInertialMatrix
         I_H = self.frontFrameInertialMatrix
         I_F = self.frontWheelInertialMatrix

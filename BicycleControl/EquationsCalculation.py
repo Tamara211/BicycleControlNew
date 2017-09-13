@@ -38,9 +38,9 @@ class EquationsCalculation:
 
         dq[0] = self.params.v * cos(self.q[2]) * self.params.rearWheelRadius
         dq[1] = self.params.v * sin(self.q[2]) * self.params.rearWheelRadius
-        dq[2] = (self.params.v * (self.q[6] / self.params.wheelBase)) * np.cos(self.params.frontFrame_tilt)
+        dq[2] = (self.params.v * (self.q[6] / self.params.wheelBase)) * np.cos(self.params.frontFrameTilt)
         dq[3] = self.q[4]
-        dq[9] = (self.params.v * (self.q[8] / self.params.wheelBase)) * np.cos(self.params.frontFrame_tilt)
+        dq[9] = (self.params.v * (self.q[8] / self.params.wheelBase)) * np.cos(self.params.frontFrameTilt)
 
         return dq
 
