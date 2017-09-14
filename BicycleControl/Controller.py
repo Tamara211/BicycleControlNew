@@ -117,24 +117,24 @@ class Controller:
 	#Set Angle, map it and send it to dynamixel (perform steer)
 	def setAngle(self):
 	
-	print('setAngle begins')
+		print('setAngle begins')
 	
-	global steerAngle
-	global mappedSteerAngle
+		global steerAngle
+		global mappedSteerAngle
 		
-	mappedSteerAngle = mapTargetAngleToMotorValue(steerAngle)
+		mappedSteerAngle = mapTargetAngleToMotorValue(steerAngle)
 
-	if mappedSteerAngle <= 100 or mappedSteerAngle >= 4000:
-		return
+		if mappedSteerAngle <= 100 or mappedSteerAngle >= 4000:
+			return
 
-	# Write goal position
-	dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_MOVING_SPEED, 200)
-	dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, mappedSteerAngle)
+		# Write goal position
+		dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_MOVING_SPEED, 200)
+		dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, mappedSteerAngle)
 
-	if dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION) != COMM_SUCCESS:
-		dynamixel.printTxRxResult(PROTOCOL_VERSION, dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION))
-	elif dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION) != 0:
-		dynamixel.printRxPacketError(PROTOCOL_VERSION, dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION))
+		if dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION) != COMM_SUCCESS:
+			dynamixel.printTxRxResult(PROTOCOL_VERSION, dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION))
+		elif dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION) != 0:
+			dynamixel.printRxPacketError(PROTOCOL_VERSION, dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION))
 		
-	pubSteerAngle.publish(steerAngle)
+		pubSteerAngle.publish(steerAngle)
 
