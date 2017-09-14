@@ -1,5 +1,6 @@
 class Controller:
 	
+	@staticmethod
 	def mapTargetVelocityToMotorValue(targetVelocity):
 		global velocity
 		#print('paramChanged: ', targetVelocity)
@@ -28,6 +29,7 @@ class Controller:
 	
 		return velocity
 	
+	@staticmethod
 	def mapTargetAngleToMotorValue(targetAngle):
 		global motorValue
 	
