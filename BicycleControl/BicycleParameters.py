@@ -28,22 +28,3 @@ class BicycleParameters:
 
         #TODO validate values
 
-        self.wheelBase = 1.16 # m
-        self.g = 9.81
-        self.rearFrameMass = 12.06 # Kg
-        self.rearWheelMass = 2.56 # Kg
-        self.rearWheelRadius = 0.34 #m
-
-        self.frontFrameMass = 2.54 # Kg
-        self.frontFrameTilt = 0.34 # Radians
-        self.frontFrameTrail = 0.08 #TODO measure again
-        self.frontWheelMass = 5.4 # Kg - including the motor
-        self.frontWheelRadius = 0.34 #m
-
-        self.rearWheelInertialMatrix = np.matrix([, , ])
-        self.rearFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
-        self.frontFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
-        self.frontWheelInertialMatrix = np.matrix([, , ])
-
-        self.rearFrameCenterOfMass = np.matrix([, , ])
-        self.frontFrameCenterOfMass = np.matrix([, , ])

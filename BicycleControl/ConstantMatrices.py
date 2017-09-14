@@ -4,7 +4,26 @@ from BicycleParameters import BicycleParameters
 class ConstantMatrices:
     def __init__(self):
 
-        self.params = BicycleParameters()
+
+        self.wheelBase = 1.16 # m
+        self.g = 9.81
+        self.rearFrameMass = 12.06 # Kg
+        self.rearWheelMass = 2.56 # Kg
+        self.rearWheelRadius = 0.34 #m
+
+        self.frontFrameMass = 2.54 # Kg
+        self.frontFrameTilt = 0.34 # Radians
+        self.frontFrameTrail = 0.08 #TODO measure again
+        self.frontWheelMass = 5.4 # Kg - including the motor
+        self.frontWheelRadius = 0.34 #m
+
+        self.rearWheelInertialMatrix = np.matrix([, , ])
+        self.rearFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
+        self.frontFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
+        self.frontWheelInertialMatrix = np.matrix([, , ])
+
+        self.rearFrameCenterOfMass = np.matrix([, , ])
+        self.frontFrameCenterOfMass = np.matrix([, , ])
 
         self.M = []
         self.C_1 = []
@@ -23,9 +42,9 @@ class ConstantMatrices:
     def calculateMatrices(self):
         # parameters
 
-        w = self.params.wheelBase
-        c = self.params.frontFrameTrail
-        lmbd = self.params.frontFrameTilt
+        w = self.wheelBase
+        c = self.frontFrameTrail
+        lmbd = self.frontFrameTilt
 
         m_R = self.rearWheelMass
         m_F = self.frontWheelMass
@@ -37,8 +56,8 @@ class ConstantMatrices:
         I_H = self.frontFrameInertialMatrix
         I_F = self.frontWheelInertialMatrix
 
-        r_R = self.params.rearWheelRadius
-        r_F = self.params.frontWheelRadius
+        r_R = self.rearWheelRadius
+        r_F = self.frontWheelRadius
 
         cmass_B = self.rearFrameCenterOfMass
         cmass_H = self.frontFrameCenterOfMass
