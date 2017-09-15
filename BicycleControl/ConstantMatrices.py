@@ -1,5 +1,4 @@
 import numpy as np
-from BicycleParameters import BicycleParameters
 
 class ConstantMatrices:
     def __init__(self):

@@ -28,7 +28,8 @@ class Controller:
 		self.x = 0 # X component of the contact point between rear wheel and the ground
 		self.y = 0 # Y component of the contact point between rear wheel and the ground
 		self.z = 0  # Z component of the contact point between rear wheel and the ground
-		self.psi = 0 # Rear frame's yaw angleself.phi = 0 # Rear frame's roll angle
+		self.psi = 0 # Rear frame's yaw angle
+        self.phi = 0 # Rear frame's roll angle
 		self.phiDot = 0 #Yaw angular velocity
 		self.psiDot = 0 #Roll angular velocity
 		self.delta = 0 # Steering angle (Can be controlled)
@@ -56,6 +57,7 @@ class Controller:
 		desiredVeloSteer = L.getTargets()
 		
 		if (fallingOver):
+            requestSteer()
 			#TODO write reaction method
 				
 		#if new velocity input from GUI save desired velocity and map motor values
@@ -85,7 +87,12 @@ class Controller:
 			return 1  # Can steer
 			
 	def fallingOver(self):
-		return True
+	    while True:
+            orientation = L.getOrientation(self)
+            rollAngle = numpy.arccos(orientation[1]/orientation[2])
+            if(rollAngle>3 | rollAngle<3): #TODO adjust values
+                return false
+
 		
 	def obstacleAhead(self):
 		return True

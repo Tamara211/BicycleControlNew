@@ -141,7 +141,7 @@ class Initializer:
 
 		self.arduino.write(b'A')
 		
-		return arduino
+		return self.arduino
 
 	@staticmethod
 	def initDynamixel(self):
