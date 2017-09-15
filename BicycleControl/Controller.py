@@ -1,28 +1,45 @@
 from EquationsCalculation import EquationsCalculation
+
+sys.path.insert(0,"/home/bicycle/catkin_ws/src/communication/src")
 import listenerCombined
-import Helper
+
 import Initializer
+import Motor
+import Steering
+
+#initialize Controller
+controller = Controller()
 
 class Controller:
+
+	#last input from GUI
+	steerAngle = 0
+	velocity = 0
+		
+	#input from GUI
+	maxRollAngle = 0
+	minRollAngle = 0
+	desiredVeloSteer = [0,0]
+	
+	#components
+	motor = None
+	steering = None
+	
+	#Listener
+	L = None
+	
+	#Publishers
+	pubSteerDenied = None
+	pubVelo = None
+	pubSteerAngle = None
 	
 	def __init__(self):
 		self.result = EquationsCalculation()
 		
-		#last input from GUI
-		steerAngle = 0
-		velocity = 0
 		
-		#input from GUI
-		maxRollAngle = 0
-		minRollAngle = 0
-		desiredVeloSteer = [0,0]
 		
 		#output
 		msgSteerDenied = "Steering denied!"
-		
-		#mapped motor values
-		mappedSteerAngle = 0
-		mappedVelocity = b'\x00'
 		
 		# Input from IMU
 		self.x = 0 # X component of the contact point between rear wheel and the ground
@@ -41,13 +58,14 @@ class Controller:
 		
 		#Initialization
 		#initialize components
-		arduino = Initializer.initArduino()
-		dynamixel = Initializer.initDynamixel()
+		motor = Motor()
+		steering = Steering()
 		
 		#initialize Listener
 		L = listenerCombined.listenerCombined()
 		listenerCombined.listener("CONTROL_LISTENER")
 
+		#Initialize Publishers
 		pubSteerDenied = rospy.Publisher('SteeringDenied', String, queue_size=10)
 		pubVelo = rospy.Publisher('CurrentVelocity', String, queue_size=10)
 		pubSteerAngle = rospy.Publisher('CurrentSteeringAngle', String, queue_size=10)
@@ -63,11 +81,13 @@ class Controller:
 		#if new velocity input from GUI save desired velocity and map motor values
 		if (velocity != desiredVeloSteer[0]):
 			velocity = desiredVelocity
-			mappedVelocity = Helper.mapTargetVelocityToMotorValue(desiredVelocity)
+			motor.mapTargetVelocityToMotorValue(desiredVelocity)
+			
 		if (steerAngle != desiredVeloSteer[1]):
 			if(requestSteer()):
 				steerAngle = desiredVeloSteer[1]
-				setAngle()
+				steering.setAngle(steerAngle)
+				pubSteerAngle.publish(steerAngle)
 			else:
 				print("Steering not allowed. Steering angle to big")
 				#TODO publish (maybe custom) steering denied message
@@ -77,7 +97,8 @@ class Controller:
 			#TODO react to obstacle
 			
 		#send motor value to motor (accelerate)
-		setVelocity()
+		motor.setVelocity()
+		pubVelo.publish(velocity)
 		
 	def requestSteer(self):
 		resultedRollAngle = self.result.calculateRollAngleAfterSteering(self.desiredSteeringAngle)
@@ -96,52 +117,3 @@ class Controller:
 		
 	def obstacleAhead(self):
 		return True
-	
-	#send velocity motor value to motor (apply acceleration)
-	def setVelocity(self):
-	
-		global velocity
-		global mappedVelocity
-	
-		try:
-			print("targetVelocity", velocity)
-			
-			#send velocity/motorValue to motor
-			arduino.flushInput()
-			arduino.flushOutput()
-			arduino.write(mappedVelocity)
-			
-			pubVelo.publish(velocity)
-			
-		#if keyboard input to stop
-		except (KeyboardInterrupt):
-			mappedVelocity = b'\x00'
-			#send new velocity/motorValue to motor
-			arduino.flushInput()
-			arduino.flushOutput()
-			arduino.write(mappedVelocity)
-
-	#Set Angle, map it and send it to dynamixel (perform steer)
-	def setAngle(self):
-	
-		print('setAngle begins')
-	
-		global steerAngle
-		global mappedSteerAngle
-		
-		mappedSteerAngle = mapTargetAngleToMotorValue(steerAngle)
-
-		if mappedSteerAngle <= 100 or mappedSteerAngle >= 4000:
-			return
-
-		# Write goal position
-		dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_MOVING_SPEED, 200)
-		dynamixel.write2ByteTxRx(port_num, PROTOCOL_VERSION, DXL_ID, ADDR_MX_GOAL_POSITION, mappedSteerAngle)
-
-		if dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION) != COMM_SUCCESS:
-			dynamixel.printTxRxResult(PROTOCOL_VERSION, dynamixel.getLastTxRxResult(port_num, PROTOCOL_VERSION))
-		elif dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION) != 0:
-			dynamixel.printRxPacketError(PROTOCOL_VERSION, dynamixel.getLastRxPacketError(port_num, PROTOCOL_VERSION))
-		
-		pubSteerAngle.publish(steerAngle)
-
