@@ -2,7 +2,7 @@ from EquationsCalculation import EquationsCalculation
 
 sys.path.insert(0,"/home/bicycle/catkin_ws/src/communication/src")
 import listenerCombined
-
+import numpy as np
 import Initializer
 import Motor
 import Steering
@@ -36,8 +36,6 @@ class Controller:
 	def __init__(self):
 		self.result = EquationsCalculation()
 		
-		
-		
 		#output
 		msgSteerDenied = "Steering denied!"
 		
@@ -69,14 +67,38 @@ class Controller:
 		pubSteerDenied = rospy.Publisher('SteeringDenied', String, queue_size=10)
 		pubVelo = rospy.Publisher('CurrentVelocity', String, queue_size=10)
 		pubSteerAngle = rospy.Publisher('CurrentSteeringAngle', String, queue_size=10)
+
+
+    def requestSteer(self, desiredAngle):
+        resultedRollAngle = self.result.calculateRollAngleAfterSteering(desiredAngle)
+        if (resultedRollAngle > self.maxRollAngle or resultedRollAngle < self.minRollAngle):
+            return 0  # Cannot steer
+        else:  # allow steering
+            return 1  # Can steer
+
+
+    def fallingOver(self):
+        while True:
+            if (self.phi> 3 | self.phi < 3):  # TODO adjust values
+                return True
+
+
+    def obstacleAhead(self):
+        return True
 		
 	while True:
 		
+		orientation = L.getOrientation
+        self.x=orientation[0]
+        self.y=orientation[1]
+        self.z=orientation[2]
+        #TODO figure out how to calculate angles, perform calculation here and assign values to attributes
+
 		desiredVeloSteer = L.getTargets()
 		
 		if (fallingOver):
-            requestSteer()
-			#TODO write reaction method
+            stabilize(self)
+			#TODO implement stabilize
 				
 		#if new velocity input from GUI save desired velocity and map motor values
 		if (velocity != desiredVeloSteer[0]):
@@ -99,21 +121,3 @@ class Controller:
 		#send motor value to motor (accelerate)
 		motor.setVelocity()
 		pubVelo.publish(velocity)
-		
-	def requestSteer(self):
-		resultedRollAngle = self.result.calculateRollAngleAfterSteering(self.desiredSteeringAngle)
-		if (resultedRollAngle > self.maxRollAngle or resultedRollAngle < self.minRollAngle):
-			return 0  # Cannot steer
-		else:  #  allow steering
-			return 1  # Can steer
-			
-	def fallingOver(self):
-	    while True:
-            orientation = L.getOrientation(self)
-            rollAngle = numpy.arccos(orientation[1]/orientation[2])
-            if(rollAngle>3 | rollAngle<3): #TODO adjust values
-                return false
-
-		
-	def obstacleAhead(self):
-		return True

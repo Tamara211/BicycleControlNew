@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.ma import cos, sin, tan
-from BicycleParameters import BicycleParameters
 from ConstantMatrices import ConstantMatrices
+from Controller import Controller
 
 class EquationsCalculation:
 
@@ -11,7 +11,7 @@ class EquationsCalculation:
 
     def __init__(self):
 
-        self.params = BicycleParameters()
+        self.controller=Controller()
         self.matrices = ConstantMatrices()
         self.deltaTorque = 0# Steering torque
         self.desiredDeltaAngle = 0 #TODO recieve from visualization
@@ -30,17 +30,17 @@ class EquationsCalculation:
 
 
     def calculateTorque(self):
-        self.deltaTorque = self.kp*(self.params.delta - self.desiredDeltaAngle) + self.kd * self.params.deltaDot
+        self.deltaTorque = self.kp*(self.controller.delta - self.desiredDeltaAngle) + self.kd * self.controller.deltaDot
 
     def kinematicEquations(self):
 
         dq = np.zeros(10)
 
-        dq[0] = self.params.v * cos(self.q[2]) * self.params.rearWheelRadius
-        dq[1] = self.params.v * sin(self.q[2]) * self.params.rearWheelRadius
-        dq[2] = (self.params.v * (self.q[6] / self.params.wheelBase)) * np.cos(self.params.frontFrameTilt)
+        dq[0] = self.controller.v * cos(self.q[2]) * self.matrices.rearWheelRadius
+        dq[1] = self.controller.v * sin(self.q[2]) * self.matrices.rearWheelRadius
+        dq[2] = (self.controller.v * (self.q[6] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
         dq[3] = self.q[4]
-        dq[9] = (self.params.v * (self.q[8] / self.params.wheelBase)) * np.cos(self.params.frontFrameTilt)
+        dq[9] = (self.controller.v * (self.q[8] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
 
         return dq
 
@@ -49,12 +49,12 @@ class EquationsCalculation:
 
         dq = np.zeros(10)
 
-        K = np.add(self.params.g * self.matrices.K_0, np.square(self.params.v) * self.matrices.K_2)
-        C = self.params.v * self.matrices.C_1
+        K = np.add(self.matrices.g * self.matrices.K_0, np.square(self.controller.v) * self.matrices.K_2)
+        C = self.controller.v * self.matrices.C_1
 
         dq[4] = input[2] / \
-             (np.square(self.params.rearWheelRadius) * self.matrices.m_T + self.matrices.I_Ryy + \
-             np.square(self.params.rearWheelRadius / self.params.frontWheelRadius) * \
+             (np.square(self.matrices.rearWheelRadius) * self.matrices.m_T + self.matrices.I_Ryy + \
+             np.square(self.matrices.rearWheelRadius / self.matrices.frontWheelRadius) * \
              self.matrices.I_Fyy)
 
         M_inv = np.linalg.inv(self.matrices.M)
@@ -96,11 +96,11 @@ class EquationsCalculation:
 
 
     def updateValues(self):
-        self.params.x = self.q[0]
-        self.params.y = self.q[1]
-        self.params.psi = self.q[2]
-        self.params.phi = self.q[5]
-        self.params.delta = self.q[6]
-        self.params.phiDot = self.q[7]
-        self.params.deltaDot = self.q[8]
-        self.params.psiDot = self.q[9]
+        self.controller.x = self.q[0]
+        self.controller.y = self.q[1]
+        self.controller.psi = self.q[2]
+        self.controller.phi = self.q[5]
+        self.controller.delta = self.q[6]
+        self.controller.phiDot = self.q[7]
+        self.controller.deltaDot = self.q[8]
+        self.controller.psiDot = self.q[9]

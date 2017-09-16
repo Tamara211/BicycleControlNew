@@ -15,7 +15,7 @@ class BicycleParameters:
         self.phiDot = 0 #Yaw angular velocity
         self.psiDot = 0 #Roll angular velocity
 
-        self.delta = 0 # Steering angle (Can be controlled)
+        self.delta = 0 # Current Steering angle (Can be controlled)
         self.deltaDot = 0 # Steering angular velocity (Can be controlled)
 
         #TODO Delete?
