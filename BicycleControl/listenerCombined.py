@@ -86,6 +86,9 @@ class listenerCombined:
 
     def getOrientation(self):
         return [orientationx, orientationy, orientationz]
+        
+    def getYawPitchRoll(self):
+		return [yaw, pitch, roll]
 
     def getAcceleration(self):
         return [accelerationx, accelerationy, accelerationz]
@@ -126,11 +129,16 @@ def callbackIMU(data):
     global accelerationz
     global orientationz
     global rotationz
+    global yaw
+    global pitch
+    global roll
+    
     s = listenerCombined()
     post = {"Date": datetime.datetime.utcnow(),
             "Angular velocity": [data.angular_velocity.x, data.angular_velocity.y, data.angular_velocity.z],
             "Orientation": [data.orientation.x, data.orientation.y, data.orientation.z],
-            "Linear acceleration": [data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z]}
+            "Linear acceleration": [data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z],
+            "Angle": [data.angle.x, data.angle.y, data.angle.z}
     
     collectionIMU = db.collection
     collectionIMU.insert_one(post)
@@ -151,6 +159,9 @@ def callbackIMU(data):
     accelerationz = data.linear_acceleration.z
     orientationz = data.orientation.z
     rotationz = data.angular_velocity.z
+    yaw = data.angle.x
+    pitch = data.angle.y
+    roll = data.angle.z
 
 
     bagimu.write("IMUPublisher", data);
