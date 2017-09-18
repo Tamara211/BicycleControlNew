@@ -87,12 +87,17 @@ class Controller:
         return True
 		
 	while True:
-		
+
 		orientation = L.getOrientation
+        angularVelocity = L.getAngularVelocity
         self.x=orientation[0]
         self.y=orientation[1]
         self.z=orientation[2]
-        #TODO figure out how to calculate angles, perform calculation here and assign values to attributes
+        self.phi = np.arccos(self.z/self.x)
+        self.psi = np.arctan(self.x/self.y)
+        self.phiDot = angularVelocity[0]
+        self.psiDot = angularVelocity[1]
+        #TODO how do we get delta and deltaDot?
 
 		desiredVeloSteer = L.getTargets()
 		

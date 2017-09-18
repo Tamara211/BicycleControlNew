@@ -16,12 +16,12 @@ class ConstantMatrices:
         self.frontWheelMass = 5.4 # Kg - including the motor
         self.frontWheelRadius = 0.34 #m
 
-        self.rearWheelInertialMatrix = np.matrix([, , ])
+        self.rearWheelInertialMatrix = np.matrix([-0.078,-0.078 ,0.156 ])
         self.rearFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
         self.frontFrameInertialMatrix = np.matrix([[Ixx, -Ixy, -Ixz], [-Iyx, Iyy, -Iyz], [-Izx, -Izy, Izz]])
         self.frontWheelInertialMatrix = np.matrix([, , ])
 
-        self.rearFrameCenterOfMass = np.matrix([, , ])
+        self.rearFrameCenterOfMass = np.matrix([0.627,-0.320 ,0 ])
         self.frontFrameCenterOfMass = np.matrix([, , ])
 
         self.M = []
