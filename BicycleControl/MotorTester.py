@@ -1,7 +1,8 @@
 import serial
-import Motor
+from Motor import Motor
 
 motor = Motor()
+motor.initArduino()
 
 #take user input and set velocity
 while True:
