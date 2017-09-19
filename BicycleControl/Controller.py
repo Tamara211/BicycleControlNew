@@ -35,6 +35,10 @@ class Controller:
 	
 	def __init__(self):
 		self.result = EquationsCalculation()
+
+		#Limits on roll angle (tilt), can be changed to allow different stability strictness
+		self.maxRollAngle=15
+		self.minRollAngle=-15
 		
 		#output
 		msgSteerDenied = "Steering denied!"
@@ -49,10 +53,6 @@ class Controller:
 		self.psiDot = 0 #Roll angular velocity
 		self.delta = 0 # Steering angle (Can be controlled)
 		self.deltaDot = 0 # Steering angular velocity (Can be controlled)
-		
-		#TODO Delete?
-		#self.thetaR = 0 # rear wheel angle relative to the rear frame
-		# self.thetaF = 0 # front wheel angle relative to the front frame
 		
 		#Initialization
 		#initialize components
@@ -79,7 +79,7 @@ class Controller:
 
     def fallingOver(self):
         while True:
-            if (self.phi> 3 | self.phi < 3):  # TODO adjust values
+            if (self.phi> 15 | self.phi < -15):  # TODO adjust values
                 return True
 
 
@@ -89,14 +89,15 @@ class Controller:
 	while True:
 
 		orientation = L.getOrientation
+		angles = L.getYawPitchRoll
         angularVelocity = L.getAngularVelocity
         self.x=orientation[0]
         self.y=orientation[1]
         self.z=orientation[2]
-        self.phi = np.arccos(self.z/self.x)
-        self.psi = np.arctan(self.x/self.y)
-        self.phiDot = angularVelocity[0]
-        self.psiDot = angularVelocity[1]
+        self.phi = angles[2]
+        self.psi = angles[0]
+        self.phiDot = angularVelocity[2]
+        self.psiDot = angularVelocity[0]
         #TODO how do we get delta and deltaDot?
 
 		desiredVeloSteer = L.getTargets()
