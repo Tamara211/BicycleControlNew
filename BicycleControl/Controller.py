@@ -72,14 +72,14 @@ class Controller:
     def requestSteer(self, desiredAngle):
         resultedRollAngle = self.result.calculateRollAngleAfterSteering(desiredAngle)
         if (resultedRollAngle > self.maxRollAngle or resultedRollAngle < self.minRollAngle):
-            return 0  # Cannot steer
+            return False  # Cannot steer
         else:  # allow steering
-            return 1  # Can steer
+            return True  # Can steer
 
 
     def fallingOver(self):
         while True:
-            if (self.phi> 15 | self.phi < -15):  # TODO adjust values
+            if (self.phi> self.maxRollAngle | self.phi < self.minRollAngle):  # TODO adjust values
                 return True
 
 
@@ -112,7 +112,7 @@ class Controller:
 			motor.mapTargetVelocityToMotorValue(desiredVelocity)
 			
 		if (steerAngle != desiredVeloSteer[1]):
-			if(requestSteer()):
+			if(requestSteer(desiredVeloSteer[1])):
 				steerAngle = desiredVeloSteer[1]
 				steering.setAngle(steerAngle)
 				pubSteerAngle.publish(steerAngle)
