@@ -157,6 +157,8 @@ class Steering:
 			dynamixel.printRxPacketError(self.PROTOCOL_VERSION, dynamixel.getLastRxPacketError(self.port_num, self.PROTOCOL_VERSION))
 		else:
 			print("Dynamixel speed has been set successfully")
+			
+		print('Dynamixel initialized')
 
 	def _init_(self):
 		
@@ -195,7 +197,7 @@ class Steering:
 
 		# Write goal position
 		dynamixel.write2ByteTxRx(self.port_num, self.PROTOCOL_VERSION, self.DXL_ID, self.ADDR_MX_MOVING_SPEED, 200)
-		dynamixel.write2ByteTxRx(self.port_num, self.PROTOCOL_VERSION, self.DXL_ID, self.ADDR_MX_GOAL_POSITION, self.mappedSteerAngle)
+		dynamixel.write2ByteTxRx(self.port_num, self.PROTOCOL_VERSION, self.DXL_ID, self.ADDR_MX_GOAL_POSITION, int(self.mappedSteerAngle))
 
 		if dynamixel.getLastTxRxResult(self.port_num, self.PROTOCOL_VERSION) != self.COMM_SUCCESS:
 			dynamixel.printTxRxResult(self.PROTOCOL_VERSION, dynamixel.getLastTxRxResult(self.port_num, self.PROTOCOL_VERSION))

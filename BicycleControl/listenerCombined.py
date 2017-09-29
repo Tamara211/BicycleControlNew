@@ -72,6 +72,9 @@ velocity = 0
 target_Velocity = 0
 target_Angle = 0
 speed = 0
+yaw = 0
+pitch = 0
+roll = 0
 imageArray = None
 
 
@@ -138,7 +141,7 @@ def callbackIMU(data):
             "Angular velocity": [data.angular_velocity.x, data.angular_velocity.y, data.angular_velocity.z],
             "Orientation": [data.orientation.x, data.orientation.y, data.orientation.z],
             "Linear acceleration": [data.linear_acceleration.x, data.linear_acceleration.y, data.linear_acceleration.z],
-            "Angle": [data.angle.x, data.angle.y, data.angle.z}
+            "Angle": [data.angle.x, data.angle.y, data.angle.z]}
     
     collectionIMU = db.collection
     collectionIMU.insert_one(post)
@@ -175,8 +178,8 @@ def callbackGPS(data):
             "Longitude": data.longitude,
             "Latitude": data.latitude}
     
-    collectionIMU = db.colletion
-    collectionIMU.insert_one(post)
+    #collectionIMU = db.colletion
+    #collectionIMU.insert_one(post)
 
         #rospy.loginfo("Longitude: %f, Latitude %f" % (data.longitude, data.latitude))
     print(s.getGPS())
@@ -243,4 +246,4 @@ def listener(listener_name):
     #rospy.spin()
 
 if __name__ == '__main__':
-    listener()
+    listener('listener')

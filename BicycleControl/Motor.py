@@ -76,7 +76,7 @@ class Motor:
 		global arduino
 		
 		arduino = serial.Serial(
-			port='/dev/ttyACM1',
+			port='/dev/ttyACM0',
 			baudrate=115200,
 			parity=serial.PARITY_ODD,
 			stopbits=serial.STOPBITS_ONE,
@@ -91,4 +91,5 @@ class Motor:
 			print("Arduino connection openned")
 
 		arduino.write(b'\x00')
+		print('Arduino initialized')
 		

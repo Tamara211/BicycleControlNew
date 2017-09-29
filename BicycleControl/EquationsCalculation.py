@@ -1,7 +1,6 @@
 import numpy as np
 from numpy.ma import cos, sin, tan
 from ConstantMatrices import ConstantMatrices
-from Controller import Controller
 
 class EquationsCalculation:
 
@@ -11,7 +10,6 @@ class EquationsCalculation:
 
     def __init__(self):
 
-        self.controller=Controller()
         self.matrices = ConstantMatrices()
         self.deltaTorque = 0# Steering torque
         self.desiredDeltaAngle = 0 #TODO recieve from visualization
@@ -29,28 +27,28 @@ class EquationsCalculation:
         # q_9: yaw angular rate
 
 
-    def calculateTorque(self):
-        self.deltaTorque = self.kp*(self.controller.delta - self.desiredDeltaAngle) + self.kd * self.controller.deltaDot
+    def calculateTorque(self, delta, deltaDot):
+        self.deltaTorque = self.kp*(delta - self.desiredDeltaAngle) + self.kd * deltaDot
 
-    def kinematicEquations(self):
+    def kinematicEquations(self, velocity):
 
         dq = np.zeros(10)
 
-        dq[0] = self.controller.v * cos(self.q[2]) * self.matrices.rearWheelRadius
-        dq[1] = self.controller.v * sin(self.q[2]) * self.matrices.rearWheelRadius
-        dq[2] = (self.controller.v * (self.q[6] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
+        dq[0] = velocity * cos(self.q[2]) * self.matrices.rearWheelRadius
+        dq[1] = velocity * sin(self.q[2]) * self.matrices.rearWheelRadius
+        dq[2] = (velocity * (self.q[6] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
         dq[3] = self.q[4]
-        dq[9] = (self.controller.v * (self.q[8] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
+        dq[9] = (velocity * (self.q[8] / self.matrices.wheelBase)) * np.cos(self.matrices.frontFrameTilt)
 
         return dq
 
 
-    def dynamicEquations(self):
+    def dynamicEquations(self, velocity):
 
         dq = np.zeros(10)
 
-        K = np.add(self.matrices.g * self.matrices.K_0, np.square(self.controller.v) * self.matrices.K_2)
-        C = self.controller.v * self.matrices.C_1
+        K = np.add(self.matrices.g * self.matrices.K_0, np.square(velocity) * self.matrices.K_2)
+        C = self.velocity * self.matrices.C_1
 
         dq[4] = input[2] / \
              (np.square(self.matrices.rearWheelRadius) * self.matrices.m_T + self.matrices.I_Ryy + \
@@ -83,19 +81,21 @@ class EquationsCalculation:
     # q_8: steer anglular rate
     # q_9: yaw angular rate
 
-    def integrateEquations(self):
-        self.updateValues()
-        self.q = np.add(self.q, np.add(self.stepSize * self.kinematicEquations(), self.stepSize * self.dynamicEquations()))
+    def integrateEquations(self, velocity):
+        #self.updateValues()
+        self.q = np.add(self.q, np.add(self.stepSize * self.kinematicEquations(), self.stepSize * self.dynamicEquations(velocity)))
 
-    def calculateRollAngleAfterSteering(self, desiredSteeringAngle):
+    def calculateRollAngleAfterSteering(self, desiredSteeringAngle, velocity, delta, deltaDot):
 
         self.desiredDeltaAngle = desiredSteeringAngle
-        self.calculateTorque()
-        self.integrateEquations()
+        self.calculateTorque(delta, deltaDot)
+        self.integrateEquations(velocity)
         return self.q[5]
+<<<<<<< HEAD
+=======
 
 
-    def updateValues(self):
+    def updateValues(self): #get current values from IMU
         self.controller.x = self.q[0]
         self.controller.y = self.q[1]
         self.controller.psi = self.q[2]
@@ -104,3 +104,4 @@ class EquationsCalculation:
         self.controller.phiDot = self.q[7]
         self.controller.deltaDot = self.q[8]
         self.controller.psiDot = self.q[9]
+>>>>>>> 71819082cbb4dc737554c00bd269ec7325fdcd1b
