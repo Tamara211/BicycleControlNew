@@ -44,6 +44,7 @@ class Controller:
 		msgSteerDenied = "Steering denied!"
 		
 		# Input from IMU
+		self.v = 0 #Velocity
 		self.x = 0 # X component of the contact point between rear wheel and the ground
 		self.y = 0 # Y component of the contact point between rear wheel and the ground
 		self.z = 0  # Z component of the contact point between rear wheel and the ground

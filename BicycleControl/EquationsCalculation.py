@@ -95,7 +95,7 @@ class EquationsCalculation:
         return self.q[5]
 
 
-    def updateValues(self):
+    def updateValues(self): #get current values from IMU
         self.controller.x = self.q[0]
         self.controller.y = self.q[1]
         self.controller.psi = self.q[2]
